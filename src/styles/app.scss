@@ -130,7 +130,7 @@
     display: grid;
     gap: 6px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-    z-index: 20;
+    z-index: 1100; /* above canvas */
   }
 }
 
@@ -150,10 +150,11 @@
     position: sticky;
     top: 0;
     background: var(--bg);
-    z-index: 10;
+    max-height: fit-content;
+    z-index: 1000; /* ensure header stays above canvas */
     gap: 6px;
     white-space: nowrap;
-    overflow: hidden;
+    overflow: visible; /* allow dropdown to render over canvas */
   }
 
   .sidebar {
