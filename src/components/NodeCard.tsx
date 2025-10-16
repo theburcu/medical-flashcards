@@ -18,6 +18,8 @@ export default function NodeCard({
   const [title, setTitle] = useState(card.title);
   const [bullets, setBullets] = useState(card.bullets);
   const [children, setChildren] = useState(card.children);
+  const [tags, setTags] = useState<string[]>(card.tags ?? []);
+  const [bgColor, setBgColor] = useState<string | undefined>(card.bgColor);
   const [saving, setSaving] = useState(false);
 
   // Keep local state in sync when a different card is selected
@@ -25,11 +27,13 @@ export default function NodeCard({
     setTitle(card.title);
     setBullets(card.bullets);
     setChildren(card.children);
+    setTags(card.tags ?? []);
+    setBgColor(card.bgColor);
   }, [card.id, card.title, card.bullets, card.children]);
 
   async function handleSave() {
     setSaving(true);
-    const updated: Flashcard = { ...card, title, bullets, children };
+    const updated: Flashcard = { ...card, title, bullets, children, tags, bgColor };
     try {
       await upsertCard(workspaceId, updated);
       const next = cards.map((c) => (c.id === card.id ? updated : c));
@@ -169,6 +173,39 @@ export default function NodeCard({
             </label>
           </div>
         </div>
+
+      <div className="node-card__section">
+        <div className="node-card__section-header">
+          <span>Classification</span>
+        </div>
+
+        <label className="node-card__field">
+          <span>Background color</span>
+          <input
+            type="color"
+            value={bgColor ?? '#ffffff'}
+            onChange={(e) => setBgColor(e.target.value)}
+            title="Node background color"
+          />
+        </label>
+
+        <label className="node-card__field">
+          <span>Tags (comma separated)</span>
+          <input
+            type="text"
+            value={tags.join(', ')}
+            onChange={(e) =>
+              setTags(
+                e.target.value
+                  .split(',')
+                  .map((t) => t.trim())
+                  .filter(Boolean)
+              )
+            }
+            placeholder="e.g., anatomy, cardio"
+          />
+        </label>
+      </div>
 
         <button
           onClick={handleSave}

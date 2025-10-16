@@ -70,7 +70,7 @@ export default function Canvas() {
           data: { label: c.title, card: c },
           position: { x: startX + i * xGap, y: layerIndex * yGap },
           style: {
-            background: 'var(--card)',
+            background: c.bgColor || 'var(--card)',
             border: '1px solid #0002',
             borderRadius: 12,
             padding: 12,

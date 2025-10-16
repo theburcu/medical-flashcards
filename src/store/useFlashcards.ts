@@ -10,6 +10,7 @@ export type Flashcard = {
   children: { false: string | null; true: string | null };
   parentId: string | null;
   tags?: string[];
+  bgColor?: string;
 };
 
 type State = {

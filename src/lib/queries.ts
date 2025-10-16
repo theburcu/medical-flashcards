@@ -7,7 +7,8 @@ const mapRow = (r: any): Flashcard => ({
   bullets: r.data?.bullets ?? [],
   children: r.data?.children ?? { false: null, true: null },
   parentId: r.data?.parentId ?? null,
-  tags: r.data?.tags ?? []
+  tags: r.data?.tags ?? [],
+  bgColor: r.data?.bgColor ?? undefined
 });
 
 export async function loadCards(workspaceId: string) {
@@ -30,7 +31,8 @@ export async function upsertCard(workspaceId: string, card: Flashcard) {
       bullets: card.bullets,
       children: card.children,
       parentId: card.parentId,
-      tags: card.tags ?? []
+    tags: card.tags ?? [],
+    bgColor: card.bgColor ?? undefined
     }
   };
   const { error } = await supabase.from('flashcards').upsert(row);
@@ -44,6 +46,16 @@ export async function deleteCard(workspaceId: string, cardId: string) {
     .eq('workspace_id', workspaceId)
     .eq('id', cardId);
   if (error) throw error;
+}
+
+export async function loadWorkspaceName(workspaceId: string) {
+  const { data, error } = await supabase
+    .from('workspaces')
+    .select('name')
+    .eq('id', workspaceId)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.name as string | null;
 }
 
 export async function search(workspaceId: string, q: string) {
