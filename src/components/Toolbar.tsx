@@ -7,6 +7,7 @@ import { supabase } from '../lib/supabase';
 export default function Toolbar({ workspaceId, workspaceName, theme, onToggleTheme }: { workspaceId: string; workspaceName?: string; theme?: 'light' | 'dark'; onToggleTheme?: () => void }) {
   const { cards, setCards, selectedId } = useFlashcards();
   const [creating, setCreating] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   async function createCard() {
     setCreating(true);
@@ -29,7 +30,7 @@ export default function Toolbar({ workspaceId, workspaceName, theme, onToggleThe
     <div className="toolbar">
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1 }}>
         <button onClick={createCard} disabled={creating} className="btn btn-success">+ New Flashcard</button>
-        <span style={{ opacity:.7 }}>
+        <span style={{ opacity:.7 }} className="hide-on-mobile">
           {selectedId ? `Selected: ${selectedId}` : 'Select a node to edit'}
         </span>
       </div>
@@ -40,19 +41,40 @@ export default function Toolbar({ workspaceId, workspaceName, theme, onToggleThe
             <span >{workspaceName}</span>
           </span>
         )}
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }}>
         {onToggleTheme && (
-          <button onClick={onToggleTheme} className="btn btn-primary btn-outlined">
+          <button onClick={onToggleTheme} className="btn btn-primary btn-outlined hide-on-mobile">
             {theme === 'dark' ? 'Light theme' : 'Dark theme'}
           </button>
         )}
         <button
           onClick={() => supabase.auth.signOut()}
-          className="btn btn-danger"
+          className="btn btn-danger hide-on-mobile"
           style={{ marginLeft: 8 }}
         >
           Log out
         </button>
+
+        {/* Mobile: hamburger menu */}
+        <button
+          className="btn btn-outlined show-on-mobile"
+          aria-label="Open menu"
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          ☰
+        </button>
+        {menuOpen && (
+          <div className="menu-dropdown show-on-mobile" role="menu">
+            {onToggleTheme && (
+              <button onClick={() => { setMenuOpen(false); onToggleTheme?.(); }} className="btn btn-primary btn-outlined" role="menuitem">
+                {theme === 'dark' ? 'Light theme' : 'Dark theme'}
+              </button>
+            )}
+            <button onClick={() => { setMenuOpen(false); void supabase.auth.signOut(); }} className="btn btn-danger" role="menuitem">
+              Log out
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
