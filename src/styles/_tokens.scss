@@ -1,0 +1,25 @@
+/* _tokens.scss */
+$bg-light: #fafafa;
+$fg-light: #242424;
+$bg-dark: #12003d;
+$fg-dark: #ededed;
+$accent: #7c3aed;
+
+:root {
+  --bg: #{$bg-light};
+  --fg: #{$fg-light};
+  --card: #ffffff;
+  --muted: #666;
+  --accent: #{$accent};
+}
+
+[data-theme='dark'] {
+  --bg: #{$bg-dark};
+  --fg: #{$fg-dark};
+  --card: #2a2378; // lighter node/background color for dark theme
+  --muted: #c8c8c8;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
