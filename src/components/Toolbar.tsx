@@ -41,7 +41,7 @@ export default function Toolbar({ workspaceId, workspaceName, theme, onToggleThe
             <span >{workspaceName}</span>
           </span>
         )}
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }}>
+      <div className="right-controls" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, position: 'relative' }}>
         {onToggleTheme && (
           <button onClick={onToggleTheme} className="btn btn-primary btn-outlined hide-on-mobile">
             {theme === 'dark' ? 'Light theme' : 'Dark theme'}

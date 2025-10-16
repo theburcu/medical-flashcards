@@ -6,6 +6,7 @@
     "toolbar toolbar toolbar"
     "sidebar canvas inspector";
   height: 100%;
+  overflow-x: hidden;
 }
 .toolbar  { grid-area: toolbar; display: flex; gap: 8px; align-items: center; padding: 8px 10px; border-bottom: 1px solid #0001; }
 .sidebar  { grid-area: sidebar; }
@@ -120,9 +121,9 @@
   .hide-on-mobile { display: none !important; }
 
   .toolbar .menu-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
+    position: fixed; /* detach from stacking contexts */
+    top: 56px; /* below toolbar */
+    right: 8px;
     background: var(--card);
     border: 1px solid #0002;
     border-radius: 10px;
@@ -130,7 +131,7 @@
     display: grid;
     gap: 6px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-    z-index: 1100; /* above canvas */
+    z-index: 20000; /* above canvas */
   }
 }
 
@@ -150,10 +151,13 @@
     position: sticky;
     top: 0;
     background: var(--bg);
-    max-height: fit-content;
-    z-index: 1000; /* ensure header stays above canvas */
+    height: fit-content;
+    z-index: 15000; /* ensure header stays above canvas */
     gap: 6px;
-    white-space: nowrap;
+    display: grid !important;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    white-space: normal;
     overflow: visible; /* allow dropdown to render over canvas */
   }
 
@@ -178,6 +182,11 @@
 
   /* Tighter list spacing on mobile */
   .index-item { padding: 8px; }
+
+  /* Center the workspace badge */
+  .toolbar > .badge { justify-self: center; max-width: 55vw; }
+  .toolbar .btn { padding: 8px 10px; }
+  .toolbar .badge { font-size: 12px; padding: 4px 8px; }
 }
 
 @media (max-width: 600px) {
